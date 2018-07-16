@@ -125,7 +125,7 @@ public class GameMaster : MonoBehaviour {
                 continue;
             }
             lookUp[aListA[i]] = count + 1;
-        }
+        }-+
         for (int i = 0; i < aListB.Count; i++)
         {
             int count = 0;
