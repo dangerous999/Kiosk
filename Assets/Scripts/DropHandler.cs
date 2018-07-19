@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class DropHandler : MonoBehaviour, IDropHandler, IPointerEnterHandler, IPointerExitHandler {
+public class DropHandler : MonoBehaviour, IDropHandler {
 
     public bool selective = true;
     public GameMaster gameMaster;
@@ -15,7 +15,7 @@ public class DropHandler : MonoBehaviour, IDropHandler, IPointerEnterHandler, IP
         gameMaster = GameObject.FindGameObjectWithTag("GM").GetComponent<GameMaster>();
     }
 
-
+    /*
     public void OnPointerEnter(PointerEventData eventData)
     {
         if (eventData.pointerDrag == null)
@@ -28,7 +28,7 @@ public class DropHandler : MonoBehaviour, IDropHandler, IPointerEnterHandler, IP
             {
                 if (typeOfItem == d.typeOfItem)
                 {
-                    d.placeHolderParent = this.transform;
+                //    d.placeHolderParent = this.transform;
                     // **** TODO DO THIS INSIDE GAME MASTER CLASS (somehow)
                     if (gameMaster.dropZoneChildCount != 0)
                     {
@@ -43,7 +43,7 @@ public class DropHandler : MonoBehaviour, IDropHandler, IPointerEnterHandler, IP
             }
             else
             {
-                d.placeHolderParent = this.transform;
+         //       d.placeHolderParent = this.transform;
                 // **** TODO DO THIS INSIDE GAME MASTER CLASS (somehow)
                 if (gameMaster.dropZoneChildCount != 0)
                 {
@@ -61,12 +61,12 @@ public class DropHandler : MonoBehaviour, IDropHandler, IPointerEnterHandler, IP
         if (eventData.pointerDrag == null)
             return;
         DragHandler d = eventData.pointerDrag.GetComponent<DragHandler>();
-        if (d != null && d.placeHolderParent == this.transform)
-        {
-            d.placeHolderParent = d.parentToReturnTo;
-        }
+       // if (d != null && d.placeHolderParent == this.transform)
+      //  {
+     //       d.placeHolderParent = d.parentToReturnTo;
+      //  }
     }
-
+    */
     public void OnDrop(PointerEventData eventData)
     {
         Debug.Log("OnDrop called on " + gameObject.name);
@@ -80,8 +80,8 @@ public class DropHandler : MonoBehaviour, IDropHandler, IPointerEnterHandler, IP
                     {
                         Debug.Log("Parent to return to changed to" + this.name);
                         d.parentToReturnTo = this.transform;
-                        // **** TODO DO THIS INSIDE GAME MASTER CLASS (somehow)
-                        if (gameMaster.dropZoneChildCount != 0)
+                    // **** TODO DO THIS INSIDE GAME MASTER CLASS (somehow)
+                    if (gameMaster.dropZoneChildCount != 0)
                         {
                             gameMaster.dropZoneChildCount--;
                         }

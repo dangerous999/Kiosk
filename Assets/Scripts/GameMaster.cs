@@ -78,7 +78,6 @@ public class GameMaster : MonoBehaviour {
         Debug.Log("Items in requestzone length: " + itemsInRequestZone.Length);
         ////List<GameObject> A = new List<GameObject>( new GameObject[itemsInDropZone.Length] );
         List<DragHandler.Slot> A = new List<DragHandler.Slot>(new DragHandler.Slot[itemsInDropZone.Length]);
-
         ////List<GameObject> B = new List<GameObject>( new GameObject[itemsInRequestZone.Length] );
         List<DragHandler.Slot> B = new List<DragHandler.Slot>(new DragHandler.Slot[itemsInRequestZone.Length]);
         Debug.Log(itemsInDropZone.Length);
@@ -125,7 +124,7 @@ public class GameMaster : MonoBehaviour {
                 continue;
             }
             lookUp[aListA[i]] = count + 1;
-        }-+
+        }
         for (int i = 0; i < aListB.Count; i++)
         {
             int count = 0;
@@ -166,6 +165,9 @@ public class GameMaster : MonoBehaviour {
         }
 
     }
+    /// <summary>
+    /// 
+    /// </summary>
     public void RemoveItemsFromRequestZone()
     {
         for (int i = 0; i < requestZoneChildCount; i++)

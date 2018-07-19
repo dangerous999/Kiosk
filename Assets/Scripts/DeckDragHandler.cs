@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class DeckDragHandler : MonoBehaviour, IDragHandler, IEndDragHandler, IBeginDragHandler, IDropHandler
+public class DeckDragHandler : MonoBehaviour, IDragHandler, IEndDragHandler, IBeginDragHandler, IPointerDownHandler
 {
 
     public GameObject[] objects;
@@ -12,9 +12,14 @@ public class DeckDragHandler : MonoBehaviour, IDragHandler, IEndDragHandler, IBe
     private GameObject instance;
     bool changedParent = false;
     public int count = 10;
+    private int broj = 0;
     public Text counterText;
-    public Transform parentToReturnTo;
 
+    ////
+    public GameObject childPrefab, instantiatedChild;
+    private Child childScript;
+    private DragHandler dragHandlerScript;
+    ////
     public enum Slot { OBJECT1, OBJECT2, OBJECT3, OBJECT4, OBJECT5, TV, RADIO };
     public DragHandler.Slot typeOfItem;
 
@@ -35,64 +40,71 @@ public class DeckDragHandler : MonoBehaviour, IDragHandler, IEndDragHandler, IBe
         counterText.text = "x" + count.ToString();
     }
 
+    public void OnPointerDown(PointerEventData eventData)
+    {   
+            if (this.transform.childCount <= 2)
+            {
+                GameObject go = Instantiate(childPrefab, transform, true) as GameObject;
+                instantiatedChild = go;
+                broj++;
+            }
+        
+        
+
+    }
+
     public void OnBeginDrag(PointerEventData eventData)
     {
-        parentToReturnTo = this.transform;
+        Debug.Log("DECK: OnBeginDrag");
+        ////
+        if (instantiatedChild != null)
+        {
+            dragHandlerScript = instantiatedChild.GetComponent<DragHandler>();        
+        }
+        ////
 
-        instance = Instantiate(objectToStore, this.transform.parent);
-        instance.GetComponent<CanvasGroup>().blocksRaycasts = false;
+
+        //instance = Instantiate(objectToStore, parentToReturnTo);
+        //instance.transform.position = Camera.main.ScreenToWorldPoint(eventData.position);
+        //instance.transform.position = new Vector3(transform.position.x, transform.position.y, 0);        
+        //instance.GetComponent<CanvasGroup>().blocksRaycasts = true;
 
         count--;
-        //objects.GetComponent<CanvasGroup>().blocksRaycasts = false;
-        //        GetComponent<CanvasGroup>().blocksRaycasts = false;
-        //objects.transform.SetParent(this.transform);
-//        this.transform.SetParent(this.transform.parent.parent);
-//        Debug.Log("My parent is: " + transform.parent.name);
     }
 
     public void OnDrag(PointerEventData eventData)
     {
+        Debug.Log("DECK: On drag");
+        ////
+        if (instantiatedChild != null)
+        {
+            dragHandlerScript.OnDrag(eventData);
+        }
+        ////
         //        transform.position = Camera.main.ScreenToWorldPoint(pos);
-        instance.transform.position = Camera.main.ScreenToWorldPoint(eventData.position);
-        instance.transform.position = new Vector3(transform.position.x, transform.position.y, 0);
+        ////instance.transform.position = Camera.main.ScreenToWorldPoint(eventData.position);
+        ////instance.transform.position = new Vector3(transform.position.x, transform.position.y, 0);
         //Debug.Log(Camera.main.ScreenToWorldPoint(eventData.position));
         //        transform.position = Camera.main.WorldToScreenPoint(pos);
         //        transform.position = Input.mousePosition;
-
     }
 
     public void OnEndDrag(PointerEventData eventData)
     {
+        Debug.Log("DECK: OnEndDrag");
+
+        dragHandlerScript.OnEndDrag(eventData);
+
+        instantiatedChild = null;
+        dragHandlerScript = null;
         //count--;
         //eventData.pointerDrag.transform.SetParent(parentToReturnTo);
-        instance.transform.SetParent(parentToReturnTo);
-        instance.GetComponent<CanvasGroup>().blocksRaycasts = true;
+        ////instance.transform.SetParent(parentToReturnTo);
+        //////instance.GetComponent<CanvasGroup>().blocksRaycasts = true;
         //objects.transform.SetParent(parentToReturnTo);
         //objects.GetComponent<CanvasGroup>().blocksRaycasts = true;
         //transform.localPosition = Vector3.zero;
     }
-
-
-    public void OnDrop(PointerEventData eventData)
-    {
-        Debug.Log("OnDrop called on " + gameObject.name);
-        //RectTransform dropZone = transform as RectTransform;
-        DragHandler d = eventData.pointerDrag.GetComponent<DragHandler>();
-        if (d != null)
-        {
-            if ( typeOfItem == d.typeOfItem  )
-            {
-                Destroy(instance);
-                count++;
-                Debug.Log("Parent to return to changed to" + this.name);
-                d.parentToReturnTo = this.transform;
-            }
-            else
-            {
-                Debug.Log("Type of item does not match!");
-            }
-        }
-
-    }
+   
 
 }
